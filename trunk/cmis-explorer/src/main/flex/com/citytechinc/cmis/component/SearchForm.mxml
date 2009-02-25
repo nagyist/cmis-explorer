@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Form xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Metadata>
+		[Event(name="submit", type="com.citytechinc.cmis.event.SearchEvent")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+			import com.citytechinc.cmis.event.SearchEvent;
+		]]>
+	</mx:Script>
+	<mx:FormItem label="Query">
+		<mx:TextInput id="query" width="600" />
+		<mx:Button id="searchBtn" label="Search" click="dispatchEvent(new SearchEvent(SearchEvent.SUBMIT, query.text))" />
+	</mx:FormItem>
+</mx:Form>
