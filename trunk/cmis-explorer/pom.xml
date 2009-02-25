@@ -7,7 +7,7 @@
 
 	<groupId>com.citytechinc.cmis</groupId>
 	<artifactId>cmis-explorer</artifactId>
-	<version>1.0</version>
+	<version>0.1</version>
 	<name>CMIS Explorer</name>
 	<packaging>swf</packaging>
 
@@ -57,7 +57,7 @@
 						<argument>${cert.file.path}</argument>
 						<argument>-keypass</argument>
 						<argument>${cert.pass}</argument>
-						<argument>cmis-explorer.air</argument>
+						<argument>${pom.artifactId}-${pom.version}.air</argument>
 						<argument>classes/main-app.xml</argument>
 						<argument>main.swf</argument>
 					</arguments>
