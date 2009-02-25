@@ -15,7 +15,8 @@ package com.citytechinc.cmis.event
 			this.query = query;
 		}
 		
-		override public function clone():Event {
+		override public function clone():Event 
+		{
 			return new SearchEvent(type, query);
 		}
 		

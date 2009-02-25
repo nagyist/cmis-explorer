@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cx="com.citytechinc.cmis.component.*" height="800" width="1280" layout="vertical" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cx="com.citytechinc.cmis.component.*" creationComplete="init()" height="800" width="1280" layout="vertical" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
 	
 	<mx:Script>
 		<![CDATA[
@@ -10,18 +10,29 @@
 			import mx.events.ListEvent;
 			import mx.events.TreeEvent;
 			
+			import com.citytechinc.cmis.event.AuthenticationEvent;
 			import com.citytechinc.cmis.event.SearchEvent;
+			import com.citytechinc.cmis.event.SignInEvent;
 			import com.citytechinc.cmis.model.Document;
 			import com.citytechinc.cmis.util.Encoder;
 			import com.citytechinc.cmis.Repository;
 			
-			[Bindable] private var repository:Repository;
+			[Bindable] private var repository:Repository = new Repository();
 			
-			private function authenticate():void 
+			private function init():void
 			{
-				repository = new Repository(user.text, pass.text, repo.text);
-				
-				appNav.selectedChild = repoNav;
+				repository.addEventListener(AuthenticationEvent.COMPLETE, setRepoNav);
+			}
+			
+			private function setRepoNav(event:AuthenticationEvent):void
+			{
+				if (event.authenticated)
+					appNav.selectedChild = repoNav;
+			}
+			
+			private function initSignInForm():void 
+			{
+				signInForm.addEventListener(SignInEvent.SUBMIT, repository.authenticate);
 			}
 			
 			private function initFolderTree():void
@@ -49,18 +60,7 @@
 		<!-- login screen -->
 		<mx:HBox horizontalAlign="center" verticalAlign="middle">
 			<!-- login form -->
-			<mx:Form label="Sign In">
-				<mx:FormItem label="Repository">
-					<mx:TextInput id="repo" />
-				</mx:FormItem>
-				<mx:FormItem label="User">
-					<mx:TextInput id="user" />
-				</mx:FormItem>
-				<mx:FormItem label="Pass">
-					<mx:TextInput id="pass" />
-					<mx:Button label="Submit" click="authenticate()" />
-				</mx:FormItem>
-			</mx:Form>
+			<cx:SignInForm id="signInForm" creationComplete="initSignInForm()" />
 		</mx:HBox>
 		<!-- repository screen -->
 		<mx:ViewStack id="repoNav">

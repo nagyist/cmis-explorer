@@ -1,6 +1,8 @@
 package com.citytechinc.cmis
 {
+	import com.citytechinc.cmis.event.AuthenticationEvent;
 	import com.citytechinc.cmis.event.SearchEvent;
+	import com.citytechinc.cmis.event.SignInEvent;
 	import com.citytechinc.cmis.model.Document;
 	import com.citytechinc.cmis.model.Folder;
 	import com.citytechinc.cmis.model.Property;
@@ -24,10 +26,7 @@ package com.citytechinc.cmis
 	import flash.utils.ByteArray;
 	
 	import mx.collections.ArrayCollection;
-	import mx.containers.FormItem;
-	import mx.controls.Button;
 	import mx.controls.List;
-	import mx.controls.TextInput;
 	import mx.controls.Tree;
 	import mx.events.DragEvent;
 	import mx.events.ListEvent;
@@ -36,7 +35,7 @@ package com.citytechinc.cmis
 	import mx.rpc.http.HTTPService;
 	import mx.utils.Base64Encoder;
 	
-	public class Repository
+	public class Repository extends EventDispatcher
 	{
 		private namespace app = "http://www.w3.org/2007/app";
 		private namespace atom = "http://www.w3.org/2005/Atom";
@@ -64,17 +63,20 @@ package com.citytechinc.cmis
 		[Bindable] public var folders:ArrayCollection;
 		[Bindable] public var queryResults:ArrayCollection;
 		
-		public function Repository(user:String, pass:String, url:String)
+		public function Repository()
 		{
 			properties = new ArrayCollection();
 			capabilities = new ArrayCollection();
-			types = new ArrayCollection();
-			
-			this.auth = getAuth(user, pass);
+			types = new ArrayCollection();			
+		}
+		
+		public function authenticate(event:SignInEvent):void
+		{
+			this.auth = getAuth(event.user, event.pass);
 			
 			var service:HTTPService = new HTTPService();
 
-			service.url = url;
+			service.url = event.url;
 			service.resultFormat = "e4x";
 			service.addEventListener(ResultEvent.RESULT, setRepositoryInfo)
 			service.headers["Authorization"] = "Basic " + this.auth;
@@ -109,6 +111,8 @@ package com.citytechinc.cmis
 			
 			this.getTypes();
 			this.getFolder(rootFolderURL);
+			
+			this.dispatchEvent(new AuthenticationEvent(AuthenticationEvent.COMPLETE, true));
 		}
 		
 		private function getTypes():void 
@@ -210,9 +214,7 @@ package com.citytechinc.cmis
 		}
 		
 		public function getQueryResults(event:SearchEvent):void 
-		{
-			trace("get query results");
-			
+		{			
 			var queryStmt:String = event.query;
 		
 			var query:XML = 
