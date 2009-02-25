@@ -1,5 +1,6 @@
 package com.citytechinc.cmis
 {
+	import com.citytechinc.cmis.event.SearchEvent;
 	import com.citytechinc.cmis.model.Document;
 	import com.citytechinc.cmis.model.Folder;
 	import com.citytechinc.cmis.model.Property;
@@ -12,7 +13,7 @@ package com.citytechinc.cmis
 	import flash.desktop.NativeDragManager;
 	import flash.desktop.NativeDragOptions;
 	import flash.display.InteractiveObject;
-	import flash.events.MouseEvent;
+	import flash.events.EventDispatcher;
 	import flash.events.NativeDragEvent;
 	import flash.filesystem.File;
 	import flash.net.URLLoader;
@@ -208,9 +209,11 @@ package com.citytechinc.cmis
 			
 		}
 		
-		public function getQueryResults(event:MouseEvent):void 
+		public function getQueryResults(event:SearchEvent):void 
 		{
-			var queryStmt:String = TextInput(FormItem(Button(event.target).parent).getChildByName("query")).text;
+			trace("get query results");
+			
+			var queryStmt:String = event.query;
 		
 			var query:XML = 
 				<cmis:query xmlns:cmis="http://www.cmis.org/2008/05" 
