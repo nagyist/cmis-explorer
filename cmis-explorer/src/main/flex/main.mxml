@@ -16,45 +16,35 @@
 			
 			[Bindable] private var repository:Repository;
 			
-			private function authenticate():void {
-
+			private function authenticate():void 
+			{
 				repository = new Repository(user.text, pass.text, repo.text);
 				
-				m.selectedChild = nav;
-				
+				appNav.selectedChild = repoNav;
 			}
 			
-			private function setTreeListListeners(event:FlexEvent):void {
-				
-				var tree:Tree = Tree(event.target);
-				
-				tree.addEventListener(TreeEvent.ITEM_OPEN, repository.getFolders);
-				tree.addEventListener(ListEvent.ITEM_CLICK, repository.getDocuments);
-				
+			private function initFolderTree():void
+			{
+				folderTree.addEventListener(TreeEvent.ITEM_OPEN, repository.getFolders);
+				folderTree.addEventListener(ListEvent.ITEM_CLICK, repository.getDocuments);
 			}
 			
-			private function setDocListListeners(event:FlexEvent):void {
-				
-				var list:List = List(event.target);
-				
-				list.addEventListener(DragEvent.DRAG_START, repository.downloadFiles);
-				list.addEventListener(NativeDragEvent.NATIVE_DRAG_ENTER, repository.getUploadFiles);
-				list.addEventListener(NativeDragEvent.NATIVE_DRAG_DROP, repository.uploadFiles);
-				
+			private function initDocList():void 
+			{
+				docList.addEventListener(DragEvent.DRAG_START, repository.downloadFiles);
+				docList.addEventListener(NativeDragEvent.NATIVE_DRAG_ENTER, repository.getUploadFiles);
+				docList.addEventListener(NativeDragEvent.NATIVE_DRAG_DROP, repository.uploadFiles);
 			}
 			
-			private function setSearchBtnListeners(event:FlexEvent):void {
-				
-				var btn:Button = Button(event.target);
-				
-				btn.addEventListener(MouseEvent.CLICK, repository.getQueryResults);
-				
+			private function initSearchBtn():void 
+			{
+				searchBtn.addEventListener(MouseEvent.CLICK, repository.getQueryResults);
 			}
 			
 		]]>
 	</mx:Script>
 	
-	<mx:ViewStack id="m" height="100%" width="100%">
+	<mx:ViewStack id="appNav" height="100%" width="100%">
 		<!-- login screen -->
 		<mx:HBox horizontalAlign="center" verticalAlign="middle">
 			<!-- login form -->
@@ -72,7 +62,7 @@
 			</mx:Form>
 		</mx:HBox>
 		<!-- repository screen -->
-		<mx:ViewStack id="nav">
+		<mx:ViewStack id="repoNav">
 			<mx:VBox>
 				<mx:TabNavigator height="100%" width="100%">
 					<!-- properties -->
@@ -111,11 +101,11 @@
 					<mx:HDividedBox label="Browser">
 						<!-- navigation tree -->
 						<mx:VBox height="100%" width="200">
-							<mx:Tree id="treeList" dataProvider="{repository.folders}" height="100%" width="100%" labelField="name" creationComplete="setTreeListListeners(event)" />
+							<mx:Tree id="folderTree" dataProvider="{repository.folders}" height="100%" width="100%" labelField="name" creationComplete="initFolderTree()" />
 						</mx:VBox>	
 						<!-- folder contents (files) -->
 						<mx:VBox height="100%" width="200">
-							<mx:List id="docList" dataProvider="{treeList.selectedItem.documents}" height="100%" width="100%" labelField="name" allowMultipleSelection="true" dragEnabled="true" creationComplete="setDocListListeners(event)" click="{coBtn.enabled = docList.selectedItem.checkedOut}" />
+							<mx:List id="docList" dataProvider="{folderTree.selectedItem.documents}" height="100%" width="100%" labelField="name" allowMultipleSelection="true" dragEnabled="true" creationComplete="initDocList()" click="{coBtn.enabled = docList.selectedItem.checkedOut}" />
 						</mx:VBox>
 						<!-- file properties -->
 						<mx:VBox height="100%">
@@ -138,7 +128,7 @@
 						<mx:Form>
 							<mx:FormItem id="queryForm" label="Query">
 								<mx:TextInput id="query" width="600" />
-								<mx:Button id="searchBtn" label="Search" creationComplete="setSearchBtnListeners(event)" />
+								<mx:Button id="searchBtn" label="Search" creationComplete="initSearchBtn()" />
 							</mx:FormItem>
 						</mx:Form>
 						<!-- search results -->
