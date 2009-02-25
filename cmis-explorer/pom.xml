@@ -13,10 +13,10 @@
 
 	<build>
 		<finalName>main</finalName>
-		<sourceDirectory>src/main/as</sourceDirectory>
+		<sourceDirectory>src/main/flex</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>src/main/as</directory>
+				<directory>src/main/flex</directory>
 				<includes>
 					<include>main-app.xml</include>
 				</includes>
