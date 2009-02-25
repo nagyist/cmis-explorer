@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" height="800" width="1280" layout="vertical" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			import mx.events.TreeEvent;
+			
+			import com.citytechinc.cmis.model.Document;
+			import com.citytechinc.cmis.util.Encoder;
+			import com.citytechinc.cmis.Repository;
+			
+			[Bindable] private var repository:Repository;
+			
+			private function authenticate():void {
+
+				repository = new Repository(user.text, pass.text, repo.text);
+				
+				m.selectedChild = nav;
+				
+			}
+			
+			private function setTreeListListeners(event:FlexEvent):void {
+				
+				var tree:Tree = Tree(event.target);
+				
+				tree.addEventListener(TreeEvent.ITEM_OPEN, repository.getFolders);
+				tree.addEventListener(ListEvent.ITEM_CLICK, repository.getDocuments);
+				
+			}
+			
+			private function setDocListListeners(event:FlexEvent):void {
+				
+				var list:List = List(event.target);
+				
+				list.addEventListener(DragEvent.DRAG_START, repository.downloadFiles);
+				list.addEventListener(NativeDragEvent.NATIVE_DRAG_ENTER, repository.getUploadFiles);
+				list.addEventListener(NativeDragEvent.NATIVE_DRAG_DROP, repository.uploadFiles);
+				
+			}
+			
+			private function setSearchBtnListeners(event:FlexEvent):void {
+				
+				var btn:Button = Button(event.target);
+				
+				btn.addEventListener(MouseEvent.CLICK, repository.getQueryResults);
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:ViewStack id="m" height="100%" width="100%">
+		<!-- login screen -->
+		<mx:HBox horizontalAlign="center" verticalAlign="middle">
+			<!-- login form -->
+			<mx:Form label="Sign In">
+				<mx:FormItem label="Repository">
+					<mx:TextInput id="repo" />
+				</mx:FormItem>
+				<mx:FormItem label="User">
+					<mx:TextInput id="user" />
+				</mx:FormItem>
+				<mx:FormItem label="Pass">
+					<mx:TextInput id="pass" />
+					<mx:Button label="Submit" click="authenticate()" />
+				</mx:FormItem>
+			</mx:Form>
+		</mx:HBox>
+		<!-- repository screen -->
+		<mx:ViewStack id="nav">
+			<mx:VBox>
+				<mx:TabNavigator height="100%" width="100%">
+					<!-- properties -->
+					<mx:VBox label="Properties">
+						<mx:DataGrid dataProvider="{repository.properties}" height="100%" width="100%">
+							<mx:columns>
+								<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
+								<mx:DataGridColumn dataField="value" headerText="Value" />
+							</mx:columns>
+						</mx:DataGrid>
+					</mx:VBox>
+					<!-- capabilities -->
+					<mx:VBox label="Capabilities">
+						<mx:DataGrid dataProvider="{repository.capabilities}" height="100%" width="100%">
+							<mx:columns>
+								<mx:DataGridColumn dataField="name" headerText="Name" />
+								<mx:DataGridColumn dataField="value" headerText="Value" />
+							</mx:columns>
+						</mx:DataGrid>
+					</mx:VBox>
+					<!-- types -->
+					<mx:HDividedBox label="Types">
+						<mx:VBox height="100%" width="200">
+							<mx:List id="typeList" dataProvider="{repository.types}" height="100%" width="100%" labelField="name" />
+						</mx:VBox>
+						<mx:VBox height="100%">
+							<mx:DataGrid dataProvider="{typeList.selectedItem.properties}" height="100%" width="100%">
+								<mx:columns>
+									<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
+									<mx:DataGridColumn dataField="value" headerText="Value" />
+								</mx:columns>
+							</mx:DataGrid>
+						</mx:VBox>
+					</mx:HDividedBox>
+					<!-- browser -->
+					<mx:HDividedBox label="Browser">
+						<!-- navigation tree -->
+						<mx:VBox height="100%" width="200">
+							<mx:Tree id="treeList" dataProvider="{repository.folders}" height="100%" width="100%" labelField="name" creationComplete="setTreeListListeners(event)" />
+						</mx:VBox>	
+						<!-- folder contents (files) -->
+						<mx:VBox height="100%" width="200">
+							<mx:List id="docList" dataProvider="{treeList.selectedItem.documents}" height="100%" width="100%" labelField="name" allowMultipleSelection="true" dragEnabled="true" creationComplete="setDocListListeners(event)" click="{coBtn.enabled = docList.selectedItem.checkedOut}" />
+						</mx:VBox>
+						<!-- file properties -->
+						<mx:VBox height="100%">
+							<!-- document form -->
+							<mx:Form label="Sign In" paddingBottom="0" paddingLeft="0" paddingTop="0">
+								<mx:Button id="coBtn" label="check-out" enabled="false" />
+							</mx:Form>
+							<!-- document properties -->
+							<mx:DataGrid id="propList" dataProvider="{docList.selectedItem.properties}" height="100%" width="100%">
+								<mx:columns>
+									<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
+									<mx:DataGridColumn dataField="value" headerText="Value" />
+								</mx:columns>
+							</mx:DataGrid>
+						</mx:VBox>
+					</mx:HDividedBox>
+					<!-- search screen -->
+					<mx:VBox label="Search">
+						<!-- search form -->
+						<mx:Form>
+							<mx:FormItem id="queryForm" label="Query">
+								<mx:TextInput id="query" width="600" />
+								<mx:Button id="searchBtn" label="Search" creationComplete="setSearchBtnListeners(event)" />
+							</mx:FormItem>
+						</mx:Form>
+						<!-- search results -->
+						<mx:HDividedBox height="100%" width="100%">
+							<!-- result list -->
+							<mx:VBox height="100%" width="200">
+								<mx:List id="resultList" dataProvider="{repository.queryResults}" height="100%" width="100%" labelField="name" />
+							</mx:VBox>
+							<!-- result properties -->
+							<mx:VBox height="100%">
+								<mx:DataGrid dataProvider="{resultList.selectedItem.properties}" height="100%" width="100%">
+									<mx:columns>
+										<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
+										<mx:DataGridColumn dataField="value" headerText="Value" />
+									</mx:columns>
+								</mx:DataGrid>
+							</mx:VBox>
+						</mx:HDividedBox>
+					</mx:VBox>
+				</mx:TabNavigator>
+			</mx:VBox>
+		</mx:ViewStack>
+	</mx:ViewStack>
+	
+</mx:WindowedApplication>
