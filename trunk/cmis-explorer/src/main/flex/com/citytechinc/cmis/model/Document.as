@@ -27,6 +27,7 @@ package com.citytechinc.cmis.model
 		
 		public static function getDocument(d:XML):Document 
 		{
+			// not sure if I want this method on the Document class or not
 			var doc:Document = new Document();
 			
 			doc.name = d.title;

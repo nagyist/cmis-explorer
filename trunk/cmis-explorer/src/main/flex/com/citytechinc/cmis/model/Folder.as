@@ -28,6 +28,7 @@ package com.citytechinc.cmis.model
 		
 		public static function getFolder(f:XML):Folder 
 		{
+			// not sure if I want this method on the Folder class or not
 			var folder:Folder = new Folder();
 			
 			folder.name = f.title;
