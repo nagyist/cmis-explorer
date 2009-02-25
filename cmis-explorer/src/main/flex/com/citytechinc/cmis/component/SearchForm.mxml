@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Form xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Form xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()">
 	<mx:Metadata>
 		[Event(name="submit", type="com.citytechinc.cmis.event.SearchEvent")]
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+		
+			import com.citytechinc.cmis.Repository;
+		
 			import com.citytechinc.cmis.event.SearchEvent;
+			
+			public var repository:Repository;
+			
+			private function init():void 
+			{
+				searchBtn.addEventListener(SearchEvent.SUBMIT, repository.getQueryResults);
+			}
+			
 		]]>
 	</mx:Script>
 	<mx:FormItem label="Query">
