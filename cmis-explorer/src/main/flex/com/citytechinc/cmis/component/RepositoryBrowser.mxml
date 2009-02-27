@@ -28,7 +28,7 @@
 	<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
 	<mx:HDividedBox label="Browser" creationComplete="init()" height="100%" width="100%" backgroundColor="#776441">
 		<!-- navigation tree -->
-		<mx:VBox height="100%" width="230" styleName="typesBox">
+		<mx:VBox height="100%" width="230" paddingLeft="10" styleName="typesBox">
 			<mx:Tree id="folderTree" dataProvider="{repository.folders}" height="100%" width="100%" labelField="name" />
 		</mx:VBox>	
 		<!-- folder contents (files) -->
@@ -38,11 +38,11 @@
 		<!-- file properties -->
 		<mx:VBox height="100%" verticalGap="0">
 			<!-- document form -->
-			<mx:Form label="Sign In" styleName="typesBox" width="100%" paddingBottom="10" paddingTop="10">
+			<mx:Form label="Sign In" styleName="typesBox" width="100%" paddingBottom="10" paddingLeft="10" paddingTop="10">
 				<mx:Button id="coBtn" label="check-out" enabled="false" disabledColor="#776441" />
 			</mx:Form>
 			<!-- document properties -->
-			<mx:VBox styleName="typesBox" height="100%" width="100%">
+			<mx:VBox styleName="dataGrid" height="100%" width="100%">
 				<mx:DataGrid id="propList" dataProvider="{docList.selectedItem.properties}" height="100%" width="100%">
 					<mx:columns>
 						<mx:DataGridColumn dataField="name" headerText="Name" width="200" />

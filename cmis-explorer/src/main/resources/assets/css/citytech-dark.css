@@ -95,12 +95,23 @@ SignInForm
 	cornerRadius: 8;
 }
 
+.dataGrid
+{
+	backgroundAlpha: .15;
+	backgroundColor: #ffffff;
+	paddingBottom: 10;
+	paddingLeft: 10;
+	paddingRight: 10;
+	paddingTop: 10;
+}
 .dataGridBox1
 {
 	backgroundAlpha: .85;
 	backgroundColor: #776441;
+	paddingBottom: 10;
 	paddingLeft: 10;
 	paddingRight: 10;
+	paddingTop: 10;
 }
 .dataGridBox2
 {
@@ -110,6 +121,8 @@ SignInForm
 {
 	backgroundAlpha: .15;
 	backgroundColor: #ffffff;
+	paddingBottom: 10;
 	paddingLeft: 10;
 	paddingRight: 10;
+	paddingTop: 10;
 }

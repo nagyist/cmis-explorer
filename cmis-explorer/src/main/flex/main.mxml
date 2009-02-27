@@ -87,7 +87,7 @@
 					<mx:VBox height="100%" width="230" paddingLeft="10" styleName="typesBox">
 						<mx:List id="typeList" dataProvider="{repository.types}" height="100%" width="100%" labelField="name" />
 					</mx:VBox>
-					<mx:VBox styleName="typesBox" height="100%" width="100%">
+					<mx:VBox styleName="dataGrid" height="100%" width="100%">
 						<mx:DataGrid dataProvider="{typeList.selectedItem.properties}" height="100%" width="100%">
 							<mx:columns>
 								<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
@@ -112,7 +112,7 @@
 						<mx:List id="resultList" dataProvider="{repository.queryResults}" height="100%" width="100%" labelField="name" />
 					</mx:VBox>
 					<!-- result properties -->
-					<mx:VBox styleName="typesBox" height="100%">
+					<mx:VBox styleName="dataGrid" height="100%">
 						<mx:DataGrid dataProvider="{resultList.selectedItem.properties}" height="100%" width="100%">
 							<mx:columns>
 								<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
