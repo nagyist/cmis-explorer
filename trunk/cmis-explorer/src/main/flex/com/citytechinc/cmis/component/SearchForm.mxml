@@ -11,7 +11,7 @@
 		]]>
 	</mx:Script>
 	
-	<mx:FormItem label="Query">
+	<mx:FormItem label="Query" color="#ffffff">
 		<mx:TextInput id="query" width="600" />
 		<mx:Button id="searchBtn" label="Search" click="dispatchEvent(new SearchEvent(SearchEvent.SUBMIT, query.text))" />
 	</mx:FormItem>
