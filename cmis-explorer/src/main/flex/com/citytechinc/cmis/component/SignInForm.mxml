@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Form xmlns:mx="http://www.adobe.com/2006/mxml">
+
 	<mx:Metadata>
 		[Event(name="submit", type="com.citytechinc.cmis.event.SignInEvent")]
 	</mx:Metadata>
+	
 	<mx:Script>
 		<![CDATA[
 			import com.citytechinc.cmis.event.SignInEvent;
 		]]>
 	</mx:Script>
-	<mx:FormItem label="Repository">
-		<mx:TextInput id="repo" />
+	
+	<mx:FormItem label="Repository" labelStyleName="label">
+		<mx:TextInput id="repo" text="http://localhost:8080/alfresco/service/api/cmis" />
 	</mx:FormItem>
-	<mx:FormItem label="User">
-		<mx:TextInput id="user" />
+	<mx:FormItem label="User" labelStyleName="label">
+		<mx:TextInput id="user" text="admin" />
 	</mx:FormItem>
-	<mx:FormItem label="Pass">
-		<mx:TextInput id="pass" />
+	<mx:FormItem label="Pass" labelStyleName="label">
+		<mx:TextInput id="pass" text="admin" />
 		<mx:Button label="Submit" click="dispatchEvent(new SignInEvent(SignInEvent.SUBMIT, user.text, pass.text, repo.text))" />
 	</mx:FormItem>
 </mx:Form>
