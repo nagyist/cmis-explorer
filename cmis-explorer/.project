@@ -3,6 +3,7 @@
 	<name>CMIS Explorer</name>
 	<comment></comment>
 	<projects>
+		<project>FlexCMIS</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
