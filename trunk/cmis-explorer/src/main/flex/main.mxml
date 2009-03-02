@@ -1,129 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cx="com.citytechinc.cmis.component.*" showStatusBar="false" creationComplete="init()" height="800" width="1280" layout="vertical" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cx="com.citytechinc.cmis.explorer.component.*" creationComplete="init()" showStatusBar="false" height="800" width="1280" layout="vertical" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
 	
 	<mx:Style source="../resources/assets/css/citytech-dark.css" />
 	
 	<mx:Script>
 		<![CDATA[
+			import com.citytechinc.cmis.explorer.Controller;
+			import com.citytechinc.cmis.explorer.event.SignInEvent;
 			
-			import com.citytechinc.cmis.event.AuthenticationEvent;
-			import com.citytechinc.cmis.event.SearchEvent;
-			import com.citytechinc.cmis.event.SignInEvent;
-			import com.citytechinc.cmis.Repository;
-			
-			[Bindable] private var repository:Repository = new Repository();
+			[Bindable] private var controller:Controller;
 			
 			[Embed(source="../resources/assets/images/logo.png")] [Bindable] public var logoBig:Class;
 			[Embed(source="../resources/assets/images/logo_sm.png")] [Bindable] public var logoSmall:Class;
 			
 			private function init():void
 			{
-				repository.addEventListener(AuthenticationEvent.COMPLETE, setRepoNav);
+				controller = new Controller();
+				
+				controller.addEventListener(SignInEvent.SUCCESS, showRepositoryNavigation);
 			}
 			
-			private function setRepoNav(event:AuthenticationEvent):void
+			private function showRepositoryNavigation(event:SignInEvent):void
 			{
-				if (event.authenticated) {
-					appNav.selectedChild = repoNav;
-					currentState = 'shrink';
-				}
+				appNavigation.selectedChild = repoNavigation;
+				
+				currentState = 'logoMinimized';
 			}
-			
-			private function initSignInForm():void 
-			{
-				signInForm.addEventListener(SignInEvent.SUBMIT, repository.authenticate);
-			}
-			
-			private function initSearchForm():void 
-			{
-				searchForm.addEventListener(SearchEvent.SUBMIT, repository.getQueryResults);
-			}
-			
+						
 		]]>
 	</mx:Script>
 	
 	<mx:states>
-		<mx:State name="shrink">
+		<mx:State name="logoMinimized">
 			<mx:SetProperty target="{logo}" name="source" value="{logoSmall}" />
 			<mx:SetProperty target="{logoBar}" name="height" value="87" />
 		</mx:State>
 	</mx:states>
 	
-	<mx:ViewStack id="appNav" height="100%" width="100%" paddingBottom="20" paddingLeft="20" paddingRight="20" paddingTop="20">
+	<!-- tabs -->
+	<mx:ViewStack id="appNavigation" height="100%" width="100%" paddingBottom="20" paddingLeft="20" paddingRight="20" paddingTop="20">
+		<!-- sign in screen -->
 		<mx:HBox horizontalAlign="center" verticalAlign="middle">
-			<!-- login form -->
-			<cx:SignInForm id="signInForm" creationComplete="initSignInForm()" />
+			<cx:SignInForm id="signInForm" controller="{controller}" />
 		</mx:HBox>
 		<!-- repository screen -->
-		<mx:TabNavigator id="repoNav" height="100%" width="100%">
-			<!-- properties -->
-			<mx:VBox label="Properties" verticalGap="0">
-				<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
-				<mx:VBox styleName="dataGridBox1" height="100%" width="100%">
-					<mx:DataGrid dataProvider="{repository.properties}" height="100%" width="100%">
-						<mx:columns>
-							<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
-							<mx:DataGridColumn dataField="value" headerText="Value" />
-						</mx:columns>
-					</mx:DataGrid>
-				</mx:VBox>
-			</mx:VBox>
-			<!-- capabilities -->
-			<mx:VBox label="Capabilities" verticalGap="0">
-				<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
-				<mx:VBox styleName="dataGridBox1" height="100%" width="100%">
-					<mx:DataGrid dataProvider="{repository.capabilities}" height="100%" width="100%">
-						<mx:columns>
-							<mx:DataGridColumn dataField="name" headerText="Name" />
-							<mx:DataGridColumn dataField="value" headerText="Value" />
-						</mx:columns>
-					</mx:DataGrid>
-				</mx:VBox>
-			</mx:VBox>
-			<!-- types -->
-			<mx:VBox label="Types" verticalGap="0">
-				<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
-				<mx:HDividedBox height="100%" width="100%" backgroundColor="#776441">
-					<mx:VBox height="100%" width="230" paddingLeft="10" styleName="typesBox">
-						<mx:List id="typeList" dataProvider="{repository.types}" height="100%" width="100%" labelField="name" />
-					</mx:VBox>
-					<mx:VBox styleName="dataGrid" height="100%" width="100%">
-						<mx:DataGrid dataProvider="{typeList.selectedItem.properties}" height="100%" width="100%">
-							<mx:columns>
-								<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
-								<mx:DataGridColumn dataField="value" headerText="Value" />
-							</mx:columns>
-						</mx:DataGrid>
-					</mx:VBox>
-				</mx:HDividedBox>
-			</mx:VBox>
-			<!-- browser -->
-			<cx:RepositoryBrowser label="Browser" repository="{repository}" />
-			<!-- search screen -->
-			<mx:VBox label="Search" verticalGap="0" backgroundColor="#776441">
-				<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
-				<!-- search form -->
-				<cx:SearchForm id="searchForm" creationComplete="initSearchForm()" width="100%" styleName="typesBox"/>
-				<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
-				<!-- search results -->
-				<mx:HDividedBox height="100%" width="100%" backgroundColor="#776441">
-					<!-- result list -->
-					<mx:VBox height="100%" width="230" paddingLeft="10" styleName="typesBox">
-						<mx:List id="resultList" dataProvider="{repository.queryResults}" height="100%" width="100%" labelField="name" />
-					</mx:VBox>
-					<!-- result properties -->
-					<mx:VBox styleName="dataGrid" height="100%">
-						<mx:DataGrid dataProvider="{resultList.selectedItem.properties}" height="100%" width="100%">
-							<mx:columns>
-								<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
-								<mx:DataGridColumn dataField="value" headerText="Value" />
-							</mx:columns>
-						</mx:DataGrid>
-					</mx:VBox>
-				</mx:HDividedBox>
-			</mx:VBox>
+		<mx:TabNavigator id="repoNavigation" height="100%" width="100%">
+			<cx:RepositoryProperties label="Properties" controller="{controller}" />
+			<cx:RepositoryCapabilities label="Capabilities" controller="{controller}" />
+			<cx:RepositoryTypes label="Types" controller="{controller}" />
+			<cx:RepositoryBrowser label="Browser" controller="{controller}" />
+			<cx:SearchForm label="Search" controller="{controller}" />
 		</mx:TabNavigator>
 	</mx:ViewStack>
+	<!-- footer -->
 	<mx:Canvas id="logoBar" height="188" width="100%" backgroundColor="#ffffff">
 		<mx:Image id="logo" source="{logoBig}" right="10" bottom="10"/>
 	</mx:Canvas>
