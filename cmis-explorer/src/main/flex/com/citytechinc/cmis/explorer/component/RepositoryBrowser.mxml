@@ -72,21 +72,25 @@
 			
 			private function getDocuments(event:DragEvent):void
 			{
-				var documents:Array = docList.selectedItems;
-				
-				var contentStreamService:ContentStreamService = new ContentStreamService(controller.auth, documents);
-				
-				var clip:Clipboard = new Clipboard();
-
-				clip.setDataHandler(ClipboardFormats.FILE_LIST_FORMAT, contentStreamService.getContentStreams);
-
-				var dragOptions:NativeDragOptions = new NativeDragOptions();
-
-				dragOptions.allowCopy = true;
-				dragOptions.allowLink = true;
-				dragOptions.allowMove = false;
-
-				NativeDragManager.doDrag(event.currentTarget as InteractiveObject, clip, null, null, dragOptions);	
+				// it looks like two drag events are being thrown at the same time?
+				if (event.dragSource == null)
+				{
+					var documents:Array = docList.selectedItems;
+					
+					var contentStreamService:ContentStreamService = new ContentStreamService(controller.auth, documents);
+					
+					var clip:Clipboard = new Clipboard();
+	
+					clip.setDataHandler(ClipboardFormats.FILE_LIST_FORMAT, contentStreamService.getContentStreams);
+	
+					var dragOptions:NativeDragOptions = new NativeDragOptions();
+	
+					dragOptions.allowCopy = true;
+					dragOptions.allowLink = true;
+					dragOptions.allowMove = false;
+					
+					NativeDragManager.doDrag(event.currentTarget as InteractiveObject, clip, null, null, dragOptions);
+				}
 			}
 			
 			public function uploadFiles(event:NativeDragEvent):void 
