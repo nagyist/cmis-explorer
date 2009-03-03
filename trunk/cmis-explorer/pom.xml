@@ -7,7 +7,7 @@
 
 	<groupId>com.citytechinc.cmis</groupId>
 	<artifactId>cmis-explorer</artifactId>
-	<version>0.1</version>
+	<version>0.2</version>
 	<name>CMIS Explorer</name>
 	<packaging>swf</packaging>
 
