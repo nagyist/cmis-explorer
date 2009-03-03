@@ -109,6 +109,12 @@
 			<version>3.2.0.3958</version>
 			<type>pom</type>
 		</dependency>
+		<dependency>
+			<groupId>com.citytechinc.cmis</groupId>
+			<artifactId>flex-cmis-client</artifactId>
+			<version>0.1</version>
+			<type>swc</type>
+		</dependency>
 	</dependencies>
 
 </project>
