@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cx="com.citytechinc.cmis.explorer.component.*" creationComplete="init()" showStatusBar="false" height="800" width="1280" layout="vertical" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+	
+	<mx:Style source="../resources/assets/css/citytech-dark.css" />
+	
+	<mx:Script>
+		<![CDATA[
+			import com.citytechinc.cmis.explorer.Controller;
+			import com.citytechinc.cmis.explorer.event.SignInEvent;
+			
+			[Bindable] private var controller:Controller;
+			
+			[Embed(source="../resources/assets/images/logo.png")] [Bindable] public var logoBig:Class;
+			[Embed(source="../resources/assets/images/logo_sm.png")] [Bindable] public var logoSmall:Class;
+			
+			private function init():void
+			{
+				controller = new Controller();
+				
+				controller.addEventListener(SignInEvent.SUCCESS, showRepositoryNavigation);
+			}
+			
+			private function showRepositoryNavigation(event:SignInEvent):void
+			{
+				appNavigation.selectedChild = repoNavigation;
+				
+				currentState = 'logoMinimized';
+			}
+						
+		]]>
+	</mx:Script>
+	
+	<mx:states>
+		<mx:State name="logoMinimized">
+			<mx:SetProperty target="{logo}" name="source" value="{logoSmall}" />
+			<mx:SetProperty target="{logoBar}" name="height" value="87" />
+		</mx:State>
+	</mx:states>
+	
+	<!-- tabs -->
+	<mx:ViewStack id="appNavigation" height="100%" width="100%" paddingBottom="20" paddingLeft="20" paddingRight="20" paddingTop="20">
+		<!-- sign in screen -->
+		<mx:HBox horizontalAlign="center" verticalAlign="middle">
+			<cx:SignInForm id="signInForm" controller="{controller}" />
+		</mx:HBox>
+		<!-- repository screen -->
+		<mx:TabNavigator id="repoNavigation" height="100%" width="100%">
+			<cx:RepositoryProperties label="Properties" controller="{controller}" />
+			<cx:RepositoryCapabilities label="Capabilities" controller="{controller}" />
+			<cx:RepositoryTypes label="Types" controller="{controller}" />
+			<cx:RepositoryBrowser label="Browser" controller="{controller}" />
+			<cx:SearchForm label="Search" controller="{controller}" />
+		</mx:TabNavigator>
+	</mx:ViewStack>
+	<!-- footer -->
+	<mx:Canvas id="logoBar" height="188" width="100%" backgroundColor="#ffffff">
+		<mx:Image id="logo" source="{logoBig}" right="10" bottom="10"/>
+	</mx:Canvas>
+	
+</mx:WindowedApplication>
