@@ -5,6 +5,13 @@ WindowedApplication
 	fontSize: 14;
 	themeColor: #776411;
 }
+Window
+{
+	backgroundColor: #776441;
+	color: #ffffff;
+	fontSize: 14;
+	themeColor: #776411;
+}
 Button
 {
 	borderColor: #776411;

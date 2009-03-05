@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="start()" layout="vertical" width="320" height="240" showStatusBar="false">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.citytechinc.cmis.explorer.Controller;
+			
+			public var controller:Controller;
+			public var path:String;
+			
+			[Bindable] public var docs:Array;
+			
+			private function start():void
+			{
+				for (var i:int = 0; i < docs.length; i++)
+				{
+					var download:DownloadItem = downloadList.itemToItemRenderer(docs[i]) as DownloadItem;
+
+					download.getContentStream(controller.auth, path);
+				}
+				
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:List id="downloadList" dataProvider="{docs}" height="100%" width="100%" itemRenderer="com.citytechinc.cmis.explorer.component.DownloadItem" />
+</mx:Window>
