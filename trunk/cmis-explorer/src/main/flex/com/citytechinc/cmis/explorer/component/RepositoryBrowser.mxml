@@ -4,45 +4,55 @@
 	<mx:Script>
 		<![CDATA[
 			import com.citytechinc.cmis.client.event.ChildrenEvent;
-			import com.citytechinc.cmis.client.event.DocumentEvent;
 			import com.citytechinc.cmis.client.model.Folder;
 			import com.citytechinc.cmis.client.service.ChildrenService;
-			import com.citytechinc.cmis.client.service.ContentStreamService;
-			import com.citytechinc.cmis.client.service.DocumentService;
 			import com.citytechinc.cmis.explorer.Controller;
 			
 			import mx.collections.ArrayCollection;
-			import mx.events.DragEvent;
+			import mx.core.Window;
 			import mx.events.ListEvent;
 			import mx.events.TreeEvent;
 			
 			private var childrenService:ChildrenService;
 			
-			[Bindable] private var documentService:DocumentService;
+			private var downloadDir:File = File.desktopDirectory;
 			
 			[Bindable] private var folders:ArrayCollection;
 			
-			[Bindable] public var controller:Controller;
+			public var controller:Controller;
 			
 			private function init():void
 			{
+				downloadDir.addEventListener(Event.SELECT, downloadDocuments);
+				downloadDir.addEventListener(FileListEvent.SELECT_MULTIPLE, uploadDocuments);
+
 				childrenService = new ChildrenService(controller.auth);
 				
 				childrenService.addEventListener(ChildrenEvent.REPO_CHILDREN, setFolders);
 				
 				childrenService.getRepositoryChildren(controller.repository);
 				
-				documentService = new DocumentService(controller.auth);
-				
-				documentService.addEventListener(DocumentEvent.CREATED, getFolder);
-				
 				folderTree.addEventListener(ListEvent.ITEM_CLICK, getFolderDocuments);
 				folderTree.addEventListener(TreeEvent.ITEM_OPENING, getFolderChildren);
-				
-				docList.addEventListener(DragEvent.DRAG_START, getDocuments);
-				docList.addEventListener(NativeDragEvent.NATIVE_DRAG_ENTER, uploadFiles);
-				docList.addEventListener(NativeDragEvent.NATIVE_DRAG_DROP, createDocuments);
 			}
+			
+			/*
+			private function acceptDragDrop(event:NativeDragEvent):void
+			{
+				if (event.clipboard.hasFormat(ClipboardFormats.FILE_LIST_FORMAT))
+					NativeDragManager.acceptDragDrop(event.currentTarget as InteractiveObject);
+			}
+			
+			public function dragDrop(event:NativeDragEvent):void
+			{
+				var files:Array = event.clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT) as Array;
+				
+				for (var i:int = 0; i < files.length; i++)
+				{
+					uploadDocs.addItem(files[i]);
+				}
+			}
+			*/
 			
 			private function setFolders(event:ChildrenEvent):void
 			{
@@ -51,7 +61,7 @@
 			
 			private function getFolderDocuments(event:ListEvent):void
 			{
-				var folder:Folder = Folder(folderTree.selectedItem);
+				var folder:Folder = folderTree.selectedItem as Folder;
 				
 				if (!folder.opened)
 					childrenService.getFolderChildren(folder);
@@ -59,60 +69,39 @@
 			
 			private function getFolderChildren(event:TreeEvent):void
 			{
-				var folder:Folder = Folder(event.item);
+				var folder:Folder = event.item as Folder;
 				
 				if (!folder.opened)
 					childrenService.getFolderChildren(folder);
 			}
 			
-			private function invalidateTree(event:Event):void
+			private function refreshFolderChildren(event:Event):void
 			{
-				folderTree.invalidateList();
+				childrenService.getFolderChildren(folderTree.selectedItem as Folder);
 			}
 			
-			private function getDocuments(event:DragEvent):void
+			private function downloadDocuments(event:Event):void
 			{
-				// it looks like two drag events are being thrown at the same time?
-				if (event.dragSource == null)
-				{
-					var documents:Array = docList.selectedItems;
-					
-					var contentStreamService:ContentStreamService = new ContentStreamService(controller.auth, documents);
-					
-					var clip:Clipboard = new Clipboard();
-	
-					clip.setDataHandler(ClipboardFormats.FILE_LIST_FORMAT, contentStreamService.getContentStreams);
-	
-					var dragOptions:NativeDragOptions = new NativeDragOptions();
-	
-					dragOptions.allowCopy = true;
-					dragOptions.allowLink = true;
-					dragOptions.allowMove = false;
-					
-					NativeDragManager.doDrag(event.currentTarget as InteractiveObject, clip, null, null, dragOptions);
-				}
-			}
-			
-			public function uploadFiles(event:NativeDragEvent):void 
-			{
-				if (event.clipboard.hasFormat(ClipboardFormats.FILE_LIST_FORMAT))
-					NativeDragManager.acceptDragDrop(event.currentTarget as InteractiveObject);
-			}
-			
-			public function createDocuments(event:NativeDragEvent):void
-			{
-				var files:Array = event.clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT) as Array;
+				var window:DownloadProgressWindow = new DownloadProgressWindow();
 				
-				documentService.createDocuments(Folder(folderTree.selectedItem), files);
+				window.controller = controller;
+				window.docs = docList.selectedItems;
+				window.path = File(event.target).nativePath;
+				
+				window.open();
 			}
 			
-			public function getFolder(event:DocumentEvent):void
+			private function uploadDocuments(event:FileListEvent):void
 			{
-				var folder:Folder = Folder(folderTree.selectedItem);
+				var window:UploadProgressWindow = new UploadProgressWindow();
 				
-				folder.opened = false;
+				window.controller = controller;
+				window.folder = folderTree.selectedItem as Folder;
+				window.files = event.files;
 				
-				childrenService.getFolderChildren(folder);
+				window.addEventListener(Event.COMPLETE, refreshFolderChildren);
+				
+				window.open();
 			}
 			
 		]]>
@@ -121,17 +110,25 @@
 	<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
 	<mx:HDividedBox label="Browser" height="100%" width="100%" backgroundColor="#776441">
 		<!-- navigation tree (folders) -->
-		<mx:VBox height="100%" width="230" paddingLeft="10" styleName="typesBox">
-			<mx:Tree id="folderTree" dataProvider="{folders}" height="100%" width="100%" labelField="name" />
+		<mx:VBox height="100%" width="25%" paddingLeft="10" styleName="typesBox">
+			<mx:VDividedBox height="100%" width="100%">
+				<mx:Tree id="folderTree" dataProvider="{folders}" height="60%" width="100%" labelField="name" />
+			</mx:VDividedBox>
 		</mx:VBox>
 		<!-- folder contents (files) -->
-		<mx:VBox height="100%" width="230" styleName="typesBox">
-			<mx:List id="docList" dataProvider="{folderTree.selectedItem.documents}" height="100%" width="100%" labelField="name" allowMultipleSelection="true" dragEnabled="true" />
+		<mx:VBox height="100%" width="25%" styleName="typesBox">
+			<mx:VBox height="100%" width="100%" horizontalAlign="right">
+				<mx:List id="docList" dataProvider="{folderTree.selectedItem.documents}" height="100%" width="100%" labelField="name" allowMultipleSelection="true" dragEnabled="true" />
+				<mx:HBox width="100%">
+					<mx:Button id="uploadBtn" width="50%" label="upload" click="downloadDir.browseForOpenMultiple('test')" enabled="{folderTree.selectedItem != null}" disabledColor="#776441" />
+					<mx:Button id="downloadBtn" width="50%" label="download" click="downloadDir.browseForDirectory('test')" enabled="{docList.selectedItems.length > 0}" disabledColor="#776441" />
+				</mx:HBox>
+			</mx:VBox>
 		</mx:VBox>
 		<!-- file properties -->
-		<mx:VBox height="100%" verticalGap="0">
+		<mx:VBox height="100%" width="50%" verticalGap="0">
 			<!-- document form -->
-			<mx:Form label="Sign In" styleName="typesBox" width="100%" paddingBottom="10" paddingLeft="10" paddingTop="10">
+			<mx:Form styleName="typesBox" width="100%" paddingBottom="0">
 				<mx:Button id="coBtn" label="check-out" enabled="false" disabledColor="#776441" />
 			</mx:Form>
 			<!-- document properties -->
