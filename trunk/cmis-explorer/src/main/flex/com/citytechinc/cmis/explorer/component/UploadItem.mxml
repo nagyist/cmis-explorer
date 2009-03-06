@@ -32,5 +32,5 @@
 	</mx:Script>
 	
 	<mx:Label text="{data.name}" />
-	<mx:ProgressBar id="pb" indeterminate="true" label="%3%%" fontSize="10" verticalGap="0" labelPlacement="right" />
+	<mx:ProgressBar id="pb" indeterminate="true" label="%3%%" fontSize="10" labelPlacement="right" />
 </mx:VBox>
