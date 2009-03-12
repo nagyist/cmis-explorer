@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" label="Search" verticalGap="0" backgroundColor="#776441">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.citytechinc.cmis.client.event.QueryEvent;
+			import com.citytechinc.cmis.client.service.QueryService;
+			import com.citytechinc.cmis.explorer.Controller;
+			
+			import mx.collections.ArrayCollection;
+			
+			private var queryService:QueryService;
+			
+			[Bindable] private var queryResults:ArrayCollection;
+			
+			[Bindable] public var controller:Controller;
+			
+			private function init():void
+			{
+				queryService = new QueryService(controller.auth);
+				
+				queryService.addEventListener(QueryEvent.RESULTS, setQueryResults);
+			}
+			
+			private function queryRepo():void
+			{
+				queryService.getQueryResults(controller.repository, query.text);
+			}
+			
+			private function setQueryResults(event:QueryEvent):void
+			{
+				queryResults = event.queryResults;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
+	<!-- search form -->
+	<mx:Form styleName="typesBox" width="100%">
+		<mx:FormItem label="Query" color="#ffffff">
+			<mx:TextInput id="query" width="600" />
+			<mx:Button id="searchBtn" label="Search" click="queryRepo()" />
+		</mx:FormItem>
+	</mx:Form>
+	<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
+	<!-- search results -->
+	<mx:HDividedBox height="100%" width="100%" backgroundColor="#776441">
+		<!-- result list -->
+		<mx:VBox height="100%" width="230" paddingLeft="10" styleName="typesBox">
+			<mx:List id="resultList" dataProvider="{queryResults}" height="100%" width="100%" labelField="name" />
+		</mx:VBox>
+		<!-- result properties -->
+		<mx:VBox styleName="dataGrid" height="100%">
+			<mx:DataGrid dataProvider="{resultList.selectedItem.properties}" height="100%" width="100%">
+				<mx:columns>
+					<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
+					<mx:DataGridColumn dataField="value" headerText="Value" />
+				</mx:columns>
+			</mx:DataGrid>
+		</mx:VBox>
+	</mx:HDividedBox>
+</mx:VBox>
