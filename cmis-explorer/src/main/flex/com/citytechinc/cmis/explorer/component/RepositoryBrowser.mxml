@@ -120,7 +120,7 @@
 			<mx:VBox height="100%" width="100%" horizontalAlign="right">
 				<mx:List id="docList" dataProvider="{folderTree.selectedItem.documents}" height="100%" width="100%" labelField="name" allowMultipleSelection="true" dragEnabled="true" />
 				<mx:HBox width="100%">
-					<mx:Button id="uploadBtn" width="50%" label="upload" click="downloadDir.browseForOpenMultiple('test')" enabled="{folderTree.selectedItem != null}" disabledColor="#776441" />
+					<mx:Button id="uploadBtn" width="50%" label="upload" click="downloadDir.browseForOpenMultiple('test')" enabled="{folderTree.selectedItem != null}" disabledColor="#776441"/>
 					<mx:Button id="downloadBtn" width="50%" label="download" click="downloadDir.browseForDirectory('test')" enabled="{docList.selectedItems.length > 0}" disabledColor="#776441" />
 				</mx:HBox>
 			</mx:VBox>

@@ -12,6 +12,8 @@ package com.citytechinc.cmis.explorer
 	{
 		[Bindable] public var auth:String;
 		
+		[Bindable] public var username:String;
+		
 		[Bindable] public var repository:Repository;
 		
 		public function Controller()
@@ -21,10 +23,12 @@ package com.citytechinc.cmis.explorer
 		public function setAuth(user:String, pass:String, url:String):void
 		{
 			auth = Encoder.getAuth(user, pass);
+			username = user;
 			
 			var repoInfoClient:RepositoryInfoService = new RepositoryInfoService(auth);
 			
 			repoInfoClient.addEventListener(RepositoryInfoEvent.INFO, setRepository);
+			repoInfoClient.addEventListener(RepositoryInfoEvent.ERROR, repositoryError);
 			
 			repoInfoClient.getRepositoryInfo(url);
 		}
@@ -35,6 +39,11 @@ package com.citytechinc.cmis.explorer
 			
 			this.dispatchEvent(new SignInEvent(SignInEvent.SUCCESS, true));
 		}
+		
+		private function repositoryError(event:RepositoryInfoEvent):void
+		{
+			this.dispatchEvent(new SignInEvent(SignInEvent.FAILURE, true));
+		}		
 
 	}
 	

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cx="com.citytechinc.cmis.explorer.component.*" creationComplete="init()" showStatusBar="false" height="800" width="1280" layout="vertical" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0">
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cx="com.citytechinc.cmis.explorer.component.*" creationComplete="init()" showStatusBar="false" height="800" width="1280" layout="vertical" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" viewSourceURL="srcview/index.html">
 	
 	<mx:Style source="../resources/assets/css/citytech-dark.css" />
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
 			import com.citytechinc.cmis.explorer.Controller;
 			import com.citytechinc.cmis.explorer.event.SignInEvent;
 			
@@ -18,6 +19,7 @@
 				controller = new Controller();
 				
 				controller.addEventListener(SignInEvent.SUCCESS, showRepositoryNavigation);
+				controller.addEventListener(SignInEvent.FAILURE, showSignInFailure);
 			}
 			
 			private function showRepositoryNavigation(event:SignInEvent):void
@@ -25,6 +27,12 @@
 				appNavigation.selectedChild = repoNavigation;
 				
 				currentState = 'logoMinimized';
+			}			
+			
+			private function showSignInFailure(event:SignInEvent):void
+			{
+				Alert.show("Login failed");
+				signInForm.enableSubmit();
 			}
 						
 		]]>

@@ -3,10 +3,13 @@
 
 	<mx:Script>
 		<![CDATA[
+			import com.citytechinc.cmis.explorer.Controller;
 			import com.citytechinc.cmis.client.model.Folder;
 			import com.citytechinc.cmis.client.service.DocumentService;
 			
 			import mx.controls.ProgressBarMode;
+			
+			[Bindable] public var controller:Controller;
 			
 			public function uploadDocument(auth:String, folder:Folder):void
 			{
@@ -14,7 +17,7 @@
 				
 				service.addEventListener(Event.COMPLETE, finish);
 				
-				service.createDocument(folder, data as File);
+				service.createDocument(folder, data as File, controller.username);
 			}
 			
 			private function finish(event:Event):void
