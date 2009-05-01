@@ -5,6 +5,7 @@ package com.citytechinc.cmis.explorer.event
 	public class SignInEvent extends Event
 	{
 		public static const SUCCESS:String = "signInSuccess";
+		public static const FAILURE:String = "signInFailure";
 		
 		public var authenticated:Boolean;
 		

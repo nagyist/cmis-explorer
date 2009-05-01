@@ -7,8 +7,13 @@
 			
 			[Bindable] public var controller:Controller;
 			
+			public function enableSubmit() : void {
+				submitButton.enabled = true;
+			}
+			
 			private function authenticate():void
 			{
+				submitButton.enabled = false;
 				controller.setAuth(user.text, pass.text, repo.text);
 			}
 			
@@ -23,6 +28,6 @@
 	</mx:FormItem>
 	<mx:FormItem label="Pass" labelStyleName="label">
 		<mx:TextInput id="pass" width="150" />
-		<mx:Button label="Submit" click="authenticate()" />
+		<mx:Button label="Submit" click="authenticate()" id="submitButton"/>
 	</mx:FormItem>
 </mx:Form>

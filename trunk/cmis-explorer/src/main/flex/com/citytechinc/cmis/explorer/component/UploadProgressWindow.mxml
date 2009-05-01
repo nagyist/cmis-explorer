@@ -19,6 +19,8 @@
 				{
 					var upload:UploadItem = uploadList.itemToItemRenderer(files[i]) as UploadItem;
 					
+					upload.controller = controller;
+					
 					upload.addEventListener(Event.COMPLETE, updateCompleted);
 
 					upload.uploadDocument(controller.auth, folder);
