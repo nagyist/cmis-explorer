@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" verticalGap="0">
+
+	<mx:Script>
+		<![CDATA[
+			import com.citytechinc.cmis.client.event.ChildrenEvent;
+			import com.citytechinc.cmis.client.model.Folder;
+			import com.citytechinc.cmis.client.service.ChildrenService;
+			import com.citytechinc.cmis.explorer.Controller;
+			
+			import mx.collections.ArrayCollection;
+			import mx.core.Window;
+			import mx.events.ListEvent;
+			import mx.events.TreeEvent;
+			
+			private var childrenService:ChildrenService;
+			
+			private var downloadDir:File = File.desktopDirectory;
+			
+			[Bindable] private var folders:ArrayCollection;
+			
+			public var controller:Controller;
+			
+			private function init():void
+			{
+				downloadDir.addEventListener(Event.SELECT, downloadDocuments);
+				downloadDir.addEventListener(FileListEvent.SELECT_MULTIPLE, uploadDocuments);
+
+				childrenService = new ChildrenService(controller.auth);
+				
+				childrenService.addEventListener(ChildrenEvent.REPO_CHILDREN, setFolders);
+				
+				childrenService.getRepositoryChildren(controller.repository);
+				
+				folderTree.addEventListener(ListEvent.ITEM_CLICK, getFolderDocuments);
+				folderTree.addEventListener(TreeEvent.ITEM_OPENING, getFolderChildren);
+			}
+			
+			/*
+			private function acceptDragDrop(event:NativeDragEvent):void
+			{
+				if (event.clipboard.hasFormat(ClipboardFormats.FILE_LIST_FORMAT))
+					NativeDragManager.acceptDragDrop(event.currentTarget as InteractiveObject);
+			}
+			
+			public function dragDrop(event:NativeDragEvent):void
+			{
+				var files:Array = event.clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT) as Array;
+				
+				for (var i:int = 0; i < files.length; i++)
+				{
+					uploadDocs.addItem(files[i]);
+				}
+			}
+			*/
+			
+			private function setFolders(event:ChildrenEvent):void
+			{
+				folders = event.folders;
+			}
+			
+			private function getFolderDocuments(event:ListEvent):void
+			{
+				var folder:Folder = folderTree.selectedItem as Folder;
+				
+				if (!folder.opened)
+					childrenService.getFolderChildren(folder);
+			}
+			
+			private function getFolderChildren(event:TreeEvent):void
+			{
+				var folder:Folder = event.item as Folder;
+				
+				if (!folder.opened)
+					childrenService.getFolderChildren(folder);
+			}
+			
+			private function refreshFolderChildren(event:Event):void
+			{
+				childrenService.getFolderChildren(folderTree.selectedItem as Folder);
+			}
+			
+			private function downloadDocuments(event:Event):void
+			{
+				var window:DownloadProgressWindow = new DownloadProgressWindow();
+				
+				window.controller = controller;
+				window.docs = docList.selectedItems;
+				window.path = File(event.target).nativePath;
+				
+				window.open();
+			}
+			
+			private function uploadDocuments(event:FileListEvent):void
+			{
+				var window:UploadProgressWindow = new UploadProgressWindow();
+				
+				window.controller = controller;
+				window.folder = folderTree.selectedItem as Folder;
+				window.files = event.files;
+				
+				window.addEventListener(Event.COMPLETE, refreshFolderChildren);
+				
+				window.open();
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
+	<mx:HDividedBox label="Browser" height="100%" width="100%" backgroundColor="#776441">
+		<!-- navigation tree (folders) -->
+		<mx:VBox height="100%" width="25%" paddingLeft="10" styleName="typesBox">
+			<mx:VDividedBox height="100%" width="100%">
+				<mx:Tree id="folderTree" dataProvider="{folders}" height="60%" width="100%" labelField="name" />
+			</mx:VDividedBox>
+		</mx:VBox>
+		<!-- folder contents (files) -->
+		<mx:VBox height="100%" width="25%" styleName="typesBox">
+			<mx:VBox height="100%" width="100%" horizontalAlign="right">
+				<mx:List id="docList" dataProvider="{folderTree.selectedItem.documents}" height="100%" width="100%" labelField="name" allowMultipleSelection="true" dragEnabled="true" />
+				<mx:HBox width="100%">
+					<mx:Button id="uploadBtn" width="50%" label="upload" click="downloadDir.browseForOpenMultiple('test')" enabled="{folderTree.selectedItem != null}" disabledColor="#776441"/>
+					<mx:Button id="downloadBtn" width="50%" label="download" click="downloadDir.browseForDirectory('test')" enabled="{docList.selectedItems.length > 0}" disabledColor="#776441" />
+				</mx:HBox>
+			</mx:VBox>
+		</mx:VBox>
+		<!-- file properties -->
+		<mx:VBox height="100%" width="50%" verticalGap="0">
+			<!-- document form -->
+			<mx:Form styleName="typesBox" width="100%" paddingBottom="0">
+				<mx:Button id="coBtn" label="check-out" enabled="false" disabledColor="#776441" />
+			</mx:Form>
+			<!-- document properties -->
+			<mx:VBox styleName="dataGrid" height="100%" width="100%">
+				<mx:DataGrid id="propList" dataProvider="{docList.selectedItem.properties}" height="100%" width="100%">
+					<mx:columns>
+						<mx:DataGridColumn dataField="name" headerText="Name" width="200" />
+						<mx:DataGridColumn dataField="value" headerText="Value" />
+					</mx:columns>
+				</mx:DataGrid>
+			</mx:VBox>
+		</mx:VBox>
+	</mx:HDividedBox>
+</mx:VBox>

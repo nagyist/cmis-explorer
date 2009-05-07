@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.citytechinc.cmis</groupId>
+	<artifactId>cmis-explorer</artifactId>
+	<version>0.4</version>
+	<name>CMIS Explorer</name>
+	<packaging>swf</packaging>
+
+	<build>
+		<finalName>main</finalName>
+		<sourceDirectory>src/main/flex</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/flex</directory>
+				<includes>
+					<include>main-app.xml</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.flexmojos</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<version>3.0-SNAPSHOT</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.1-beta-1</version>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<executable>java</executable>
+					<workingDirectory>${project.build.directory}</workingDirectory>
+					<arguments>
+						<argument>-jar</argument>
+						<argument>${flex.sdk.home}/lib/adt.jar</argument>
+						<argument>-package</argument>
+						<argument>-storetype</argument>
+						<argument>pkcs12</argument>
+						<argument>-storepass</argument>
+						<argument>${cert.pass}</argument>
+						<argument>-keystore</argument>
+						<argument>${cert.file.path}</argument>
+						<argument>-keypass</argument>
+						<argument>${cert.pass}</argument>
+						<argument>${pom.artifactId}-${pom.version}.air</argument>
+						<argument>classes/main-app.xml</argument>
+						<argument>main.swf</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>flexmojos-snapshots</id>
+			<url>http://repository.sonatype.org/content/repositories/flexmojos-snapshots</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>flex-releases</id>
+			<url>http://repository.sonatype.org/content/repositories/flex</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>	
+		<pluginRepository>
+			<id>flexmojos-snapshots</id>
+			<url>http://repository.sonatype.org/content/repositories/flexmojos-snapshots</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>air-framework</artifactId>
+			<version>3.2.0.3958</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>com.citytechinc.cmis</groupId>
+			<artifactId>flex-cmis-client</artifactId>
+			<version>0.3</version>
+			<type>swc</type>
+		</dependency>
+	</dependencies>
+
+</project>
