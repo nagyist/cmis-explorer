@@ -112,7 +112,7 @@
 		<dependency>
 			<groupId>com.citytechinc.cmis</groupId>
 			<artifactId>flex-cmis-client</artifactId>
-			<version>0.2.1</version>
+			<version>0.3</version>
 			<type>swc</type>
 		</dependency>
 	</dependencies>
