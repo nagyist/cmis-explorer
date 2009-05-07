@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="start()" layout="vertical" width="320" height="240" showStatusBar="false">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.citytechinc.cmis.client.model.Folder;
+			import com.citytechinc.cmis.explorer.Controller;
+			
+			private var completed:int = 0;
+			
+			public var controller:Controller;
+			public var folder:Folder;
+			
+			[Bindable] public var files:Array;
+			
+			private function start():void
+			{
+				for (var i:int = 0; i < files.length; i++)
+				{
+					var upload:UploadItem = uploadList.itemToItemRenderer(files[i]) as UploadItem;
+					
+					upload.controller = controller;
+					
+					upload.addEventListener(Event.COMPLETE, updateCompleted);
+
+					upload.uploadDocument(controller.auth, folder);
+				}
+				
+			}
+			
+			private function updateCompleted(event:Event):void
+			{
+				completed++;
+				
+				if (completed == files.length)
+					this.dispatchEvent(new Event(Event.COMPLETE));
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:List id="uploadList" dataProvider="{files}" height="100%" width="100%" itemRenderer="com.citytechinc.cmis.explorer.component.UploadItem" />
+</mx:Window>
