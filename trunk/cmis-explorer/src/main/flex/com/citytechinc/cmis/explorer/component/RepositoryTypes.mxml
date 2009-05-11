@@ -33,7 +33,7 @@
 	</mx:Script>
 	
 	<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
-	<mx:HDividedBox height="100%" width="100%" backgroundColor="#776441">
+	<mx:HDividedBox height="100%" width="100%"  styleName="dataGridBox1">
 		<mx:VBox height="100%" width="230" paddingLeft="10" styleName="typesBox">
 			<mx:List id="typeList" dataProvider="{types}" height="100%" width="100%" labelField="name" />
 		</mx:VBox>

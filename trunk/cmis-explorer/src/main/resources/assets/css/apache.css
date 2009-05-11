@@ -1,0 +1,145 @@
+WindowedApplication 
+{
+	backgroundColor: #ffffff;
+	color: #000000;
+	fontSize: 14;
+	themeColor: #ffffff;
+}
+Window
+{
+	backgroundColor: #ffffff;
+	color: #ffffff;
+	fontSize: 14;
+	themeColor: #000000;
+}
+Button
+{
+	borderColor: #BBBBBB;
+	color: #000000;
+	fillAlphas: 0.8, 0.0, 0.8, 0.0;
+	fillColors: #F0EFEF, #FFFFFF, #F0EFEF, #FFFFFF;
+	fontWeight: normal;
+	highlightAlphas: 0.25, 0;
+	textRollOverColor: #990000;
+	textSelectedColor: #000000;
+	themeColor: #BBBBBB;
+}
+TextInput
+{
+	borderColor: #BBBBBB;
+	borderStyle: solid;
+	color: #000000;
+	fontWeight: normal;
+}
+TabNavigator
+{
+	backgroundAlpha: 1;
+	borderColor: #BBBBBB;
+	color: #000000;
+	tabStyleName: "myTabs";
+	firstTabStyleName: "myTabs";
+	lastTabStyleName: "myTabs";
+	selectedTabTextStyleName: "mySelectedTabs";
+	disabledColor: #000000;
+}
+.myTabs {
+	highlightAlphas: 0.15, 0;
+	fillAlphas: 0.85, 0.55;
+	fillColors: #ffffff, #ffffff;
+	backgroundAlpha: 1;
+	backgroundColor: #ffffff;
+	borderColor: #BBBBBB;
+	color: #898585;
+	textRollOverColor: #000000;
+	themeColor: #BBBBBB;
+	fontWeight: bold;
+	disabledColor: #918A8A;
+}
+.mySelectedTabs {
+	color: #000000;
+	textRollOverColor: #000000;
+}
+DataGrid
+{
+	alternatingItemColors: #ffffff, #ffffff;
+	backgroundAlpha: 0.1;
+	borderColor: #BBBBBB;
+	color: #000000;
+	fontSize: 11;
+	headerColors: #C0C0C0, #BBBBBB;
+	horizontalGridLines: true;
+	horizontalGridLineColor: #EEEEEE;
+	rollOverColor: #C46363;
+	selectionColor: #C46363;
+	textSelectedColor: #ffffff;
+	verticalGridLines: false;
+	verticalGridLineColor: #000000;
+	headerStyleName: dataGridHeader;
+	textRollOverColor: #FCFCFC;
+}
+List
+{
+	backgroundAlpha: 1;
+	borderColor: #BBBBBB;
+	color: #000000;
+	rollOverColor: #990000;
+	selectionColor: #990000;
+	textRollOverColor: #ffffff;
+	textSelectedColor: #ffffff;
+}
+Tree 
+{
+	borderColor: #EEEEEE;
+	color: #000000;
+	openDuration: 0;
+	rollOverColor: #990000;
+	selectionColor: #990000;
+	textRollOverColor: #ffffff;
+	textSelectedColor: #ffffff;
+}
+
+SignInForm
+{
+	backgroundAlpha: 0.25;
+	backgroundColor: #BBBBBB;
+	borderColor: #990000;
+	borderStyle: solid;
+	borderThickness: 2;
+	cornerRadius: 8;
+}
+
+.dataGrid
+{
+	backgroundAlpha: .15;
+	backgroundColor: #E4E4E4;
+	paddingBottom: 10;
+	paddingLeft: 10;
+	paddingRight: 10;
+	paddingTop: 10;
+}
+.dataGridBox1
+{
+	backgroundAlpha: .85;
+	backgroundColor: #E4E4E4;
+	paddingBottom: 10;
+	paddingLeft: 10;
+	paddingRight: 10;
+	paddingTop: 10;
+}
+.dataGridBox2
+{
+	backgroundColor: #E4E4E4;
+}
+.typesBox
+{
+	backgroundAlpha: .15;
+	backgroundColor: #E4E4E4;
+	paddingBottom: 10;
+	paddingLeft: 10;
+	paddingRight: 10;
+	paddingTop: 10;
+}
+.dataGridHeader
+{
+	fontWeight: bold;
+}
