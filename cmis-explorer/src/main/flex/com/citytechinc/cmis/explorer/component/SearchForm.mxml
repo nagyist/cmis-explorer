@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" label="Search" verticalGap="0" backgroundColor="#776441">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" label="Search" verticalGap="0" >
 	
 	<mx:Script>
 		<![CDATA[
@@ -38,14 +38,14 @@
 	<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
 	<!-- search form -->
 	<mx:Form styleName="typesBox" width="100%">
-		<mx:FormItem label="Query" color="#ffffff">
+		<mx:FormItem label="Query">
 			<mx:TextInput id="query" width="600" />
 			<mx:Button id="searchBtn" label="Search" click="queryRepo()" />
 		</mx:FormItem>
 	</mx:Form>
 	<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
 	<!-- search results -->
-	<mx:HDividedBox height="100%" width="100%" backgroundColor="#776441">
+	<mx:HDividedBox height="100%" width="100%" styleName="dataGridBox1">
 		<!-- result list -->
 		<mx:VBox height="100%" width="230" paddingLeft="10" styleName="typesBox">
 			<mx:List id="resultList" dataProvider="{queryResults}" height="100%" width="100%" labelField="name" />

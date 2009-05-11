@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:cx="com.citytechinc.cmis.explorer.component.*" creationComplete="init()" showStatusBar="false" height="800" width="1280" layout="vertical" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" viewSourceURL="srcview/index.html">
 	
-	<mx:Style source="../resources/assets/css/citytech-dark.css" />
+	<mx:Style source="../resources/assets/css/apache.css" />
 	
 	<mx:Script>
 		<![CDATA[
@@ -11,8 +11,8 @@
 			
 			[Bindable] private var controller:Controller;
 			
-			[Embed(source="../resources/assets/images/logo.png")] [Bindable] public var logoBig:Class;
-			[Embed(source="../resources/assets/images/logo_sm.png")] [Bindable] public var logoSmall:Class;
+			[Embed(source="../resources/assets/images/feather.gif")] [Bindable] public var logoBig:Class;
+			[Embed(source="../resources/assets/images/feather-small.gif")] [Bindable] public var logoSmall:Class;
 			
 			private function init():void
 			{

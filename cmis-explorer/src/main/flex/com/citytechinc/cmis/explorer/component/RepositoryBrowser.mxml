@@ -108,7 +108,7 @@
 	</mx:Script>
 	
 	<mx:VBox styleName="dataGridBox2" height="2" width="100%" />
-	<mx:HDividedBox label="Browser" height="100%" width="100%" backgroundColor="#776441">
+	<mx:HDividedBox label="Browser" height="100%" width="100%" styleName="dataGridBox1">
 		<!-- navigation tree (folders) -->
 		<mx:VBox height="100%" width="25%" paddingLeft="10" styleName="typesBox">
 			<mx:VDividedBox height="100%" width="100%">
