@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Form xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Form xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()">
 
 	<mx:Script>
 		<![CDATA[
@@ -7,15 +7,58 @@
 			
 			[Bindable] public var controller:Controller;
 			
+			private static const LOCAL_KEY_USER:String = "cmis.explorer.username";
+			private static const LOCAL_KEY_PASS:String = "cmis.explorer.password";
+			private static const LOCAL_KEY_SERVER:String = "cmis.explorer.server";
+
+			
 			public function enableSubmit() : void {
 				submitButton.enabled = true;
+			}
+			
+			private function init() : void {
+				user.text = retrieveDecrypted(LOCAL_KEY_USER);
+				pass.text = retrieveDecrypted(LOCAL_KEY_PASS);
+				repo.text = retrieveDecrypted(LOCAL_KEY_SERVER);
+				if(user.text != "" || pass.text != "" || repo.text != "") { // we had remembered the logoon, so check the box again
+					remember.selected = true;
+				}
 			}
 			
 			private function authenticate():void
 			{
 				submitButton.enabled = false;
+				if(remember.selected) {
+					// store the data
+					storeEncrypted(LOCAL_KEY_USER, user.text);
+					storeEncrypted(LOCAL_KEY_PASS, pass.text);
+					storeEncrypted(LOCAL_KEY_SERVER, repo.text);
+				} else {
+					// delete the data
+					storeEncrypted(LOCAL_KEY_USER, "");
+					storeEncrypted(LOCAL_KEY_PASS, "");
+					storeEncrypted(LOCAL_KEY_SERVER, "");					
+				}
 				controller.setAuth(user.text, pass.text, repo.text);
 			}
+			
+			//store the text in the encrypted local store 
+			private function storeEncrypted(key:String, value:String):void {
+			    var data:ByteArray = new ByteArray();
+			    data.writeUTFBytes(value);//create a byte array out of the text we want to encrypt
+			    EncryptedLocalStore.setItem(key, data); //store the byte array into the encrypted local storage 
+			}
+			
+			//read the data from the encrypted local store
+			private function retrieveDecrypted(key:String):String {
+			    //using the same key I used when I wrote the data, I reead the bytes back
+			    var bytes:ByteArray = EncryptedLocalStore.getItem(key);
+			    if(bytes)
+			        return bytes.readUTFBytes(bytes.bytesAvailable);
+			    else
+			        return "";
+			}
+			
 			
 		]]>
 	</mx:Script>
@@ -29,5 +72,8 @@
 	<mx:FormItem label="Pass" labelStyleName="label">
 		<mx:TextInput id="pass" width="150" />
 		<mx:Button label="Submit" click="authenticate()" id="submitButton"/>
+	</mx:FormItem>
+	<mx:FormItem>
+		<mx:CheckBox label="remember logon" id="remember"/>
 	</mx:FormItem>
 </mx:Form>
