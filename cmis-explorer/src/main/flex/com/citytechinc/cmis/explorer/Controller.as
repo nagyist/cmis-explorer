@@ -30,7 +30,7 @@ package com.citytechinc.cmis.explorer
 			repoInfoClient.addEventListener(RepositoryInfoEvent.INFO, setRepository);
 			repoInfoClient.addEventListener(RepositoryInfoEvent.ERROR, repositoryError);
 			
-			repoInfoClient.getRepositoryInfo(url);
+			repoInfoClient.requestRepositoryInfo(url);
 		}
 		
 		private function setRepository(event:RepositoryInfoEvent):void
