@@ -7,7 +7,7 @@
 
 	<groupId>com.citytechinc.cmis</groupId>
 	<artifactId>cmis-explorer</artifactId>
-	<version>0.4</version>
+	<version>0.6.2</version>
 	<name>CMIS Explorer</name>
 	<packaging>swf</packaging>
 
@@ -112,7 +112,7 @@
 		<dependency>
 			<groupId>com.citytechinc.cmis</groupId>
 			<artifactId>flex-cmis-client</artifactId>
-			<version>0.3</version>
+			<version>0.6.2</version>
 			<type>swc</type>
 		</dependency>
 	</dependencies>
