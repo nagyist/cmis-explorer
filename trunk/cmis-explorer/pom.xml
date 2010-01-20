@@ -7,7 +7,7 @@
 
 	<groupId>com.citytechinc.cmis</groupId>
 	<artifactId>cmis-explorer</artifactId>
-	<version>0.6.2</version>
+	<version>1.0</version>
 	<name>CMIS Explorer</name>
 	<packaging>swf</packaging>
 
@@ -26,7 +26,7 @@
 			<plugin>
 				<groupId>org.sonatype.flexmojos</groupId>
 				<artifactId>flexmojos-maven-plugin</artifactId>
-				<version>3.0-SNAPSHOT</version>
+				<version>3.0.0</version>
 				<extensions>true</extensions>
 			</plugin>
 			<plugin>
@@ -57,7 +57,7 @@
 						<argument>${cert.file.path}</argument>
 						<argument>-keypass</argument>
 						<argument>${cert.pass}</argument>
-						<argument>${pom.artifactId}-${pom.version}.air</argument>
+						<argument>${pom.artifactId}.air</argument>
 						<argument>classes/main-app.xml</argument>
 						<argument>main.swf</argument>
 					</arguments>
@@ -112,7 +112,7 @@
 		<dependency>
 			<groupId>com.citytechinc.cmis</groupId>
 			<artifactId>flex-cmis-client</artifactId>
-			<version>0.6.2</version>
+			<version>1.0</version>
 			<type>swc</type>
 		</dependency>
 	</dependencies>
