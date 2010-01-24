@@ -2,8 +2,8 @@
 
 	<mx:Script>
 		<![CDATA[
-			import com.citytechinc.cmis.client.model.Document;
-			import com.citytechinc.cmis.client.service.ContentStreamService;
+			import org.apache.chemistry.client.model.Document;
+			import org.apache.chemistry.client.service.ContentStreamService;
 			
 			import flash.events.Event;
 			

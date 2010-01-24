@@ -3,7 +3,7 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import com.citytechinc.cmis.client.model.Folder;
+			import org.apache.chemistry.client.model.Folder;
 			import com.citytechinc.cmis.explorer.Controller;
 			
 			private var completed:int = 0;

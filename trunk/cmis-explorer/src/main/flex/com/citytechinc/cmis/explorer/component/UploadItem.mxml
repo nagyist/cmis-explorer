@@ -4,8 +4,8 @@
 	<mx:Script>
 		<![CDATA[
 			import com.citytechinc.cmis.explorer.Controller;
-			import com.citytechinc.cmis.client.model.Folder;
-			import com.citytechinc.cmis.client.service.DocumentService;
+			import org.apache.chemistry.client.model.Folder;
+			import org.apache.chemistry.client.service.DocumentService;
 			
 			import mx.controls.ProgressBarMode;
 			

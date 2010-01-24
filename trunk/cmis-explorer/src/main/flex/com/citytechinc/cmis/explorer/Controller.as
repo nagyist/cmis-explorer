@@ -1,10 +1,10 @@
 package com.citytechinc.cmis.explorer
 {
-	import com.citytechinc.cmis.client.event.RepositoryInfoEvent;
-	import com.citytechinc.cmis.client.model.Repository;
-	import com.citytechinc.cmis.client.service.RepositoryInfoService;
+	import org.apache.chemistry.client.event.RepositoryInfoEvent;
+	import org.apache.chemistry.client.model.Repository;
+	import org.apache.chemistry.client.service.RepositoryInfoService;
+	import org.apache.chemistry.util.Encoder;
 	import com.citytechinc.cmis.explorer.event.SignInEvent;
-	import com.citytechinc.cmis.util.Encoder;
 	
 	import flash.events.EventDispatcher;
 	
