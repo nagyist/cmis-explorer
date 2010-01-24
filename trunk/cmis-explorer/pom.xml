@@ -110,7 +110,7 @@
 			<type>pom</type>
 		</dependency>
 		<dependency>
-			<groupId>com.citytechinc.cmis</groupId>
+			<groupId>org.apache.chemistry</groupId>
 			<artifactId>flex-cmis-client</artifactId>
 			<version>1.0</version>
 			<type>swc</type>
