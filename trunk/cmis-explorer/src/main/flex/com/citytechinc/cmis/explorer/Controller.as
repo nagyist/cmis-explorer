@@ -1,8 +1,8 @@
 package com.citytechinc.cmis.explorer
 {
-	import org.apache.chemistry.client.event.RepositoryInfoEvent;
-	import org.apache.chemistry.client.model.Repository;
-	import org.apache.chemistry.client.service.RepositoryInfoService;
+	import org.apache.chemistry.atompub.client.event.RepositoryInfoEvent;
+	import org.apache.chemistry.atompub.client.model.Repository;
+	import org.apache.chemistry.atompub.client.service.RepositoryInfoService;
 	import org.apache.chemistry.util.Encoder;
 	import com.citytechinc.cmis.explorer.event.SignInEvent;
 	
