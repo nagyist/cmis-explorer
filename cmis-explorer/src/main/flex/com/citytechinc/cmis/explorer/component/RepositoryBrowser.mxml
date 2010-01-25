@@ -3,9 +3,9 @@
 
 	<mx:Script>
 		<![CDATA[
-			import org.apache.chemistry.client.event.ChildrenEvent;
-			import org.apache.chemistry.client.model.Folder;
-			import org.apache.chemistry.client.service.ChildrenService;
+			import org.apache.chemistry.atompub.client.event.ChildrenEvent;
+			import org.apache.chemistry.atompub.client.model.Folder;
+			import org.apache.chemistry.atompub.client.service.ChildrenService;
 			import com.citytechinc.cmis.explorer.Controller;
 			
 			import mx.collections.ArrayCollection;

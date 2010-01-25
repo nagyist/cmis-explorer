@@ -2,8 +2,8 @@
 
 	<mx:Script>
 		<![CDATA[
-			import org.apache.chemistry.client.model.Document;
-			import org.apache.chemistry.client.service.ContentStreamService;
+			import org.apache.chemistry.atompub.client.model.Document;
+			import org.apache.chemistry.atompub.client.service.ContentStreamService;
 			
 			import flash.events.Event;
 			

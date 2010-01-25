@@ -3,8 +3,8 @@
 	
 	<mx:Script>
 		<![CDATA[
-			import org.apache.chemistry.client.event.QueryEvent;
-			import org.apache.chemistry.client.service.QueryService;
+			import org.apache.chemistry.atompub.client.event.QueryEvent;
+			import org.apache.chemistry.atompub.client.service.QueryService;
 			import com.citytechinc.cmis.explorer.Controller;
 			
 			import mx.collections.ArrayCollection;
